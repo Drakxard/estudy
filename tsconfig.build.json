@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,               // <-- ¡Ahora sí queremos emitir JS!
+    "outDir": "dist/server",       // <-- salida del backend compilado
+    "module": "ESNext",            // <-- dejalo igual si usás ESM
+    "target": "ES2022",            // <-- o más moderno
+    "moduleResolution": "node",    // <-- para ESM con `import.meta`, etc.
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["server/**/*"]
+}

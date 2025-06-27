@@ -1,0 +1,73 @@
+{
+  "appId": "com.mathstudy.app",
+  "productName": "Mathematics Study Platform",
+  "directories": {
+    "output": "electron-dist"
+  },
+  "files": [
+    "dist/**/*",
+    "electron-main.js",
+    "electron-preload.js",
+    "package.json",
+    "server/**/*",
+    "shared/**/*",
+    "sube-seccion/**/*",
+    "attached_assets/**/*",
+    "node_modules/**/*",
+    "!node_modules/*/{test,__tests__,tests,example,examples}/**/*",
+    "!**/*.{md,txt}"
+  ],
+  "extraResources": [
+    {
+      "from": "sube-seccion",
+      "to": "sube-seccion",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "attached_assets", 
+      "to": "attached_assets",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "icon.ico"
+  },
+  "linux": {
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "electron/assets/icon.png"
+  },
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "electron/assets/icon.icns"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
+  }
+}

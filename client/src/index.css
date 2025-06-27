@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom gray colors for ultra-dark theme */
+  --gray-950: hsl(0, 0%, 6%);
+  --gray-925: hsl(0, 0%, 10%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 6%);
+  --foreground: hsl(0, 0%, 95%);
+  --muted: hsl(0, 0%, 10%);
+  --muted-foreground: hsl(0, 0%, 64%);
+  --popover: hsl(0, 0%, 10%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --card: hsl(0, 0%, 10%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --border: hsl(0, 0%, 15%);
+  --input: hsl(0, 0%, 15%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(0, 0%, 10%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --accent: hsl(0, 0%, 10%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 95%);
+  --ring: hsl(0, 0%, 83%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gray-950 text-gray-200;
+  }
+  
+  html {
+    @apply dark;
+  }
+}
+
+/* Custom utility classes for the ultra-dark theme */
+@layer utilities {
+  .bg-gray-950 {
+    background-color: hsl(0, 0%, 6%);
+  }
+  
+  .bg-gray-925 {
+    background-color: hsl(0, 0%, 10%);
+  }
+  
+  .text-gray-925 {
+    color: hsl(0, 0%, 10%);
+  }
+  
+  .border-gray-925 {
+    border-color: hsl(0, 0%, 10%);
+  }
+}
+
+/* KaTeX styles override for dark theme */
+.katex {
+  color: hsl(0, 0%, 95%) !important;
+}
+
+.katex .base {
+  color: hsl(0, 0%, 95%) !important;
+}
+
+/* Math content styling */
+.math-content .katex-display {
+  margin: 1em 0;
+}
+
+.math-content .katex {
+  font-size: 1.1em;
+}

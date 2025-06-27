@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/server",     // carpeta donde quieres el JS compilado
+    "rootDir": "server",         // carpeta raíz de tus .ts de servidor
+    "noEmit": false              // habilita la emisión de .js
+  },
+  "include": ["server/**/*"],    // sólo tus .ts de servidor
+  "exclude": ["node_modules", "dist", "build"]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "mathematics-study-platform",
+  "version": "1.0.0",
+  "description": "Mathematics Study Platform - Desktop App",
+  "main": "electron-simple.js",
+  "type": "commonjs",
+  "scripts": {
+    "electron": "electron .",
+    "build-desktop": "electron-builder --win --config electron-builder.json"
+  },
+  "build": {
+    "appId": "com.mathstudy.app",
+    "productName": "Mathematics Study Platform",
+    "directories": {
+      "output": "electron-dist"
+    },
+    "files": [
+      "dist/**/*",
+      "electron-simple.js",
+      "package.json",
+      "server/**/*",
+      "shared/**/*",
+      "sube-seccion/**/*",
+      "attached_assets/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# Dependencias de Node
+/node_modules/
+
+# Directorios de build / empaquetado
+/dist/
+/build/
+/out/
+/sube-seccion/
+
+# Salidas de Electron
+/electron/dist/
+/electron/build/
+/electron-final/
+/dist-electron/
+/release/
+
+# Archivos de entorno
+.env
+.env.*.local
+
+# Cachés y logs
+/.cache/
+/logs/
+/log.txt
+
+# Mapas, tipados generados y artefactos de compilación TS
+*.js.map
+*.d.ts
+
+# Configuración local de editores / IDEs
+.vscode/
+.idea/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Tailwind / PostCSS cache
+/.postcss-cache/
+
+# Archivos temporales
+*.tmp
+*.swp
+
+certs/*.pfx
