@@ -27,7 +27,6 @@ export default defineConfig({
   },
   server: {
     // Definir el puerto de desarrollo para que coincida con tu cliente (opcional)
-    host: '0.0.0.0',  
     port: 3000,
     fs: {
       strict: true,

@@ -1,0 +1,10 @@
+{
+  "name": "mathematics-study-platform",
+  "version": "1.0.0",
+  "description": "Mathematics Study Platform - Desktop App",
+  "main": "electron-main.js",
+  "homepage": "./",
+  "author": "Mathematics Study Platform",
+  "license": "MIT",
+  "private": true
+}

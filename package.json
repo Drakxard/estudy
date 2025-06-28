@@ -8,11 +8,11 @@
    "main": "electron-main.js",
   "scripts": {
     "dev:server":     "cross-env NODE_ENV=development tsx server/index.ts",
-    "dev:renderer": "vite --port 3000 --host",
+    "dev:renderer":   "vite --port 3000",
     "electron-dev":   "concurrently -k -n SERVER,UI,APP -c cyan,magenta,yellow \"npm run dev:server\" \"npm run dev:renderer\" \"wait-on http://localhost:3000 && electron .\"",
     "electron":       "electron .",
 
-    "build:server":   "cross-env NODE_ENV=production tsx server/index.ts --out-dir server/public --esm",
+   "build:server": "cross-env NODE_ENV=production esbuild server/index.ts --bundle --platform=node --target=node16 --format=esm --outdir=dist/server --external:*.css --external:*.png --external:@shared/* --external:lightningcss --external:*.node",
     "build:renderer": "vite build --config vite.config.ts",
     "build:electron": "npm run build:renderer && npm run build:server",
     "build": "npm run build:renderer && npm run build:server",
@@ -43,17 +43,19 @@
     "directories": {
       "output": "dist-electron",
       "buildResources": "assets"
-    },
+    },"asar": true,
+    "asarUnpack": [
+      "preload.js"
+    ],
    "files": [
       "electron-main.js",
       "preload.js",
-      "dist/server/**/*",
+      "dist/**/*",
       "server/public/**/*",
       "assets/**/*",
       "certs/**/*",
       "package.json"
     ],
-    "asar": true,
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico",
