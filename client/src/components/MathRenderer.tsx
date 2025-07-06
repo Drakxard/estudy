@@ -2,66 +2,70 @@ import 'katex/dist/katex.min.css';
 import React from 'react';
 import { InlineMath, BlockMath } from 'react-katex';
 
-
 interface MathRendererProps {
+  /**
+   * Contenido de texto con delimitadores de fórmulas:
+   * inline: $...$, \(...\)
+   * block: $$...$$, \[...\]
+   */
   content: string;
-  inlineSize?: number;     // em
-  displaySize?: number;    // em
-  displayPadding?: number; // rem
+  className?: string;
 }
 
 export function MathRenderer({ content, className = "" }: MathRendererProps) {
-  // Split content by math delimiters and render appropriately
-  const renderContent = (text: string) => {
-    const blockMathRegex = /\$\$(.*?)\$\$/gs;
-    const inlineMathRegex = /\$(.*?)\$/g;
+  // Regex para detectar fórmulas block y inline, incluyendo delimitadores KaTeX y backslash
+  const blockMathRegex = /\$\$(.*?)\$\$|\\\[(.*?)\\\]/gs;
+  const inlineMathRegex = /\$(.*?)\$|\\\((.*?)\\\)/g;
 
+  const renderContent = (text: string) => {
     const result: React.ReactNode[] = [];
     let lastIndex = 0;
-    let match: RegExpExecArray | null;
+    type Match = { match: RegExpExecArray; type: 'block' | 'inline'; group: number };
+    const matches: Match[] = [];
+    let m: RegExpExecArray | null;
 
-    // Collect block math matches
-    const blockMatches: Array<{ match: RegExpExecArray; type: 'block' }> = [];
-    while ((match = blockMathRegex.exec(text)) !== null) {
-      blockMatches.push({ match, type: 'block' });
+    // 1) Detectar fórmulas block ($$...$$ y \[...\])
+    while ((m = blockMathRegex.exec(text)) !== null) {
+      const group = m[1] != null ? 1 : 2;
+      matches.push({ match: m, type: 'block', group });
     }
 
-    // Collect inline math matches (on text with blocks removed)
-    const inlineMatches: Array<{ match: RegExpExecArray; type: 'inline' }> = [];
-    const tempText = text.replace(blockMathRegex, (m) => ' '.repeat(m.length));
-    while ((match = inlineMathRegex.exec(tempText)) !== null) {
-      inlineMatches.push({ match, type: 'inline' });
+    // 2) Remover bloques en texto temporal para no re-detectar como inline
+    const tempText = text.replace(blockMathRegex, s => ' '.repeat(s.length));
+
+    // 3) Detectar fórmulas inline ($...$ y \(...\))
+    while ((m = inlineMathRegex.exec(tempText)) !== null) {
+      const group = m[1] != null ? 1 : 2;
+      matches.push({ match: m, type: 'inline', group });
     }
 
-    // Merge and sort all matches by original index
-    const allMatches = [...blockMatches, ...inlineMatches].sort(
-      (a, b) => a.match.index - b.match.index
-    );
+    // 4) Ordenar todas las coincidencias según posición original
+    matches.sort((a, b) => a.match.index - b.match.index);
 
-    allMatches.forEach(({ match, type }, idx) => {
-      // Text before math
+    // 5) Construir nodos React
+    matches.forEach(({ match, type, group }, idx) => {
+      // Texto anterior
       if (match.index > lastIndex) {
-        const before = text.slice(lastIndex, match.index);
+        const textBefore = text.slice(lastIndex, match.index);
         result.push(
-          <span key={`text-${idx}`}>
-            {before.split('\n').map((line, i, arr) => (
+          <span key={`text-${idx}`}>{
+            textBefore.split('\n').map((line, i, arr) => (
               <React.Fragment key={i}>
                 {line}
                 {i < arr.length - 1 && <br />}
               </React.Fragment>
-            ))}
-          </span>
+            ))
+          }</span>
         );
       }
 
-      // The math itself
-      const mathContent = match[1].trim();
+      const mathContent = (match[group] || '').trim();
       try {
         if (type === 'block') {
           result.push(
-        <div key={`math-${idx}`} className="my-6 text-center text-2xl leading-relaxed">
-          <BlockMath math={mathContent} errorColor="#cc0000" />
-        </div>
+            <div key={`math-${idx}`} className="my-6 text-center text-2xl leading-relaxed">
+              <BlockMath math={mathContent} errorColor="#cc0000" />
+            </div>
           );
         } else {
           result.push(
@@ -69,11 +73,16 @@ export function MathRenderer({ content, className = "" }: MathRendererProps) {
           );
         }
       } catch {
-        // Fallback for invalid LaTeX
-        const delim = type === 'block' ? '$$' : '$';
+        // Fallback si TeX inválido
+        const openDelim = type === 'block'
+          ? (group === 1 ? '$$' : '\\[')
+          : (group === 1 ? '$' : '\\(');
+        const closeDelim = type === 'block'
+          ? (group === 1 ? '$$' : '\\]')
+          : (group === 1 ? '$' : '\\)');
         result.push(
           <span key={`error-${idx}`} className="text-red-500 font-mono">
-            {delim}{mathContent}{delim}
+            {openDelim + mathContent + closeDelim}
           </span>
         );
       }
@@ -81,7 +90,7 @@ export function MathRenderer({ content, className = "" }: MathRendererProps) {
       lastIndex = match.index + match[0].length;
     });
 
-    // Remaining text after last match
+    // 6) Texto restante
     if (lastIndex < text.length) {
       const rest = text.slice(lastIndex);
       result.push(
@@ -99,9 +108,9 @@ export function MathRenderer({ content, className = "" }: MathRendererProps) {
     return result;
   };
 
-return (
-  <div className={`math-content ${className} [&_.katex]:text-3xl [&_.katex-display]:text-3xl`}>
-    {renderContent(content)}
-  </div>
-);
+  return (
+    <div className={`math-content ${className} [&_.katex]:text-3xl [&_.katex-display]:text-3xl`}>
+      {renderContent(content)}
+    </div>
+  );
 }

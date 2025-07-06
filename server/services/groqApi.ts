@@ -4,24 +4,22 @@ export async function callGroqAPI(prompt: string, apiKey: string, modelId: strin
   try {
     console.log("🤖 GROQ API Call Starting...");
     console.log(`📝 Prompt length: ${prompt.length} characters`);
-
+                                                          
     if (!apiKey) {
       throw new Error("GROQ_API_KEY not provided");
     }
 
     const selectedModel = modelId;
 
-    const systemPrompt = `Eres un asistente especializado en matemáticas y educación adaptativa. 
-
-CONTEXTO EDUCATIVO:
-Adapta tu respuesta al nivel del estudiante y proporciona explicaciones claras y pedagógicas.
-Si tienes contexto de materiales de estudio, úsalo para dar respuestas más precisas y relevantes.
-
-FORMATO DE RESPUESTA:
-- Proporciona una explicación paso a paso
-- Usa LaTeX para notación matemática cuando sea necesario
-- Sé claro y conciso
-- Incluye ejemplos cuando sea apropiado`;
+      const systemPrompt = `Genera una demostración en LaTeX usando expresiones como $\sqrt{x} + \sqrt[3]{x} + \lim_{x \to 0} x + \sin(x) + \cos(x) + \log{x} + \frac{a}{b}$. Si la respuesta contiene “**” o símbolos incompletos, no la envíes. Adáptala al nivel del estudiante y proporciona ejemplos claros. Evalúa tu respuesta según:
+      1. Partes de toda demostración:
+  a) Hipótesis
+  b) Tesis
+  c) Cadena de implicaciones
+  d) Cierre
+      2. Tipos de prueba: directa, contraposición, contradicción y recíproco.
+      3. Conectores lógicos: “Entonces”, “Por tanto”, “Por…”.
+      4. Resumen de la receta final. Sé claro, conciso y pedagógico. Eres asistente experto en matemáticas adaptativas. Usa LaTeX siempre correctamente.`;
 
     const requestBody = {
       messages: [
@@ -34,8 +32,8 @@ FORMATO DE RESPUESTA:
           content: prompt,
         },
       ],
-      model: selectedModel,
-      max_tokens: 1000,
+      model: 'deepseek-r1-distill-llama-70b',
+      max_tokens: 4096,
       temperature: 0.7,
     };
 

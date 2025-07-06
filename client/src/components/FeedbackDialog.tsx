@@ -31,6 +31,7 @@ export function FeedbackDialog() {
 
       const response = await fetch('/api/ai/feedback', {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -57,6 +58,7 @@ export function FeedbackDialog() {
   const handleClose = () => {
     setShowFeedbackDialog(false);
     setFeedback('');
+    feedbackMutation.reset();
   };
 
   const handleGetFeedback = () => {

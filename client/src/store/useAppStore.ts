@@ -29,6 +29,10 @@ interface AppState {
   timerInterval: number | null;
   studyStartTime: number | null;
 
+  clearAllResponses: () => void;
+  exportAllResponses: () => string;             // devuelve JSON
+  importAllResponses: (json: string) => void;
+
   // Settings
   settings: Settings | null;
 
@@ -120,6 +124,24 @@ setSectionFiles: (files: string[]) => {
   set({ sectionFiles: sorted });
 },
 
+
+clearAllResponses: () => {
+        set({ responses: {} });
+        localStorage.removeItem('math-study-store');
+      },
+      exportAllResponses: () => {
+        return JSON.stringify(get().responses, null, 2);
+      },
+      importAllResponses: (json) => {
+        try {
+          const obj = JSON.parse(json);
+          if (typeof obj === 'object' && obj !== null) {
+            set({ responses: obj });
+          }
+        } catch {
+          console.error('JSON inválido para importación');
+        }
+      },
 
 
       // Actions
