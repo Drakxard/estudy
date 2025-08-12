@@ -64,7 +64,7 @@ export function SectionTransitionDialog() {
             </div>
           )}
 
-          <div className="flex gap-4">
+        {/*Boton feedback todos los ejes
             <Button
               onClick={cancelSectionTransition}
               variant="outline"
@@ -72,7 +72,9 @@ export function SectionTransitionDialog() {
             >
               ¿Feedback?
             </Button>
-            
+        */}    
+          <div className="flex gap-4">
+          
             {hasNextSection && (
               <Button
                 onClick={advanceToNextSection}
@@ -82,15 +84,15 @@ export function SectionTransitionDialog() {
               </Button>
             )}
           </div>
-
-          {!hasNextSection && (
+        
+          {/*!hasNextSection && (
             <Button
               onClick={cancelSectionTransition}
               className="bg-green-600 hover:bg-green-700"
             >
               Ver Feedback Final
             </Button>
-          )}
+          )*/}
         </div>
       </DialogContent>
     </Dialog>

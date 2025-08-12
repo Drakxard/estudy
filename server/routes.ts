@@ -234,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const response = await callGroqAPI(
         `Por favor, resuelve el siguiente ejercicio de matemáticas paso a paso:\n\n${exerciseText}`,
         apiKey,
-        'llama-3.1-8b-instant'
+        'deepseek-r1-distill-llama-70b'
       );
       
       res.json({ response });
@@ -247,7 +247,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get AI feedback for section completion
   app.post("/api/ai/feedback", async (req, res) => {
     try {
-      const { exercises, responses, apiKey, modelId = 'llama-3.1-8b-instant', customPrompt } = req.body;
+      const { exercises, responses, apiKey, modelId = 'deepseek-r1-distill-llama-70b', customPrompt } = req.body;
       
       if (!exercises || !Array.isArray(exercises)) {
         return res.status(400).json({ error: "Exercises array is required" });
@@ -262,7 +262,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (customPrompt && customPrompt.trim()) {
         prompt = `${customPrompt}\n\nEjercicios y respuestas:\n`;
       } else {
-        prompt = "He completado una sección de ejercicios de matemáticas. Por favor, proporciona retroalimentación sobre mi progreso:\n\n";
+        prompt = "Eres un profesor de matemáticas experto en demostraciones. Analiza la siguiente respuesta de un alumno y evalúa su corrección:\n\n";
       }
       
       exercises.forEach((exercise, index) => {
@@ -276,11 +276,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       if (!customPrompt || !customPrompt.trim()) {
-        prompt += "Por favor, proporciona:\n";
-        prompt += "1. Retroalimentación general sobre mi comprensión\n";
-        prompt += "2. Áreas que debo mejorar\n";
-        prompt += "3. Sugerencias para seguir estudiando\n";
-        prompt += "4. Usa LaTeX para fórmulas matemáticas cuando sea necesario (formato $formula$ para inline y $$formula$$ para display).\n";
+        prompt += "Revisa lo siguiente:\n";
+        prompt += "•  Que el alumno haya identificado correctamente la hipótesis y los datos del problema.\n";
+        prompt += "•  El tipo de razonamiento aplicado (por ejemplo, prueba directa, contrarrecíproco, implicación inversa) y su validez lógica.\n";
+        prompt += "•  La coherencia y el rigor de cada paso de la demostración.\n";
+        prompt += "•  Si la conclusión (tesis) está bien argumentada a partir de lo anterior.\n";
+        prompt += "•  Formato $formula$ para inline y $$formula$$ para display.\n";
       }
 
       const feedback = await callGroqAPI(prompt, apiKey, modelId);

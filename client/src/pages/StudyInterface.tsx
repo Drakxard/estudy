@@ -10,6 +10,7 @@ import { RestBreakDialog } from '@/components/RestBreakDialog';
 import { BKTProgress } from '@/components/BKTProgress';
 import type { Exercise, Settings as SettingsType } from '@shared/schema';
 import { MathRenderer } from '@/components/MathRenderer';
+import { ExerciseFeedbackButton } from '@/components/ExerciseFeedbackButton';
 export default function StudyInterface() {
   const {
     setExercises,
@@ -111,6 +112,7 @@ export default function StudyInterface() {
     saveResponse,
     setLastCursorPos,
   ]);
+ 
 
   // Atajos de teclado: Esc para settings, Ctrl+← y Ctrl+→ para cambiar de ejercicio
   useEffect(() => {
@@ -128,6 +130,13 @@ export default function StudyInterface() {
         saveCurrentResponse();
         nextExercise();
       }
+      if (e.ctrlKey && e.key.toLowerCase() === 'f') {
+      e.preventDefault();
+      document
+        .getElementById(`feedback-btn-${currentExercise?.id}`)
+        ?.click();
+    }
+
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -138,7 +147,11 @@ export default function StudyInterface() {
     previousExercise,
     nextExercise,
     saveCurrentResponse, // importante incluirla como dependencia
+    currentExercise,
   ]);
+
+
+
   const sectionExercises = exercises.filter(ex => ex.sectionId === currentSectionId);
   const totalSections = exercises.length ? Math.max(...exercises.map(ex => ex.sectionId)) : 1;
   const formatTime = (m: number, s: number) => `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
@@ -287,7 +300,15 @@ export default function StudyInterface() {
 
       {/* BKT Progress */}
       <BKTProgress currentSectionId={currentSectionId} exercises={exercises} />
-
+      <div className="mt-4 flex justify-end">
+      {currentExercise && (
+      <ExerciseFeedbackButton
+        id={`feedback-btn-${currentExercise.id}`}
+        exercise={currentExercise}
+        response={currentResponse}
+      />
+      )}
+    </div>
       {/* Bottom Shortcuts */}
       <div className="text-center p-2 text-xs text-gray-600 border-t border-gray-800">
         Ctrl+← Anterior • Ctrl+→ Siguiente • Esc Configuración

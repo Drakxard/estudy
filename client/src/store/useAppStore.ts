@@ -35,6 +35,10 @@ interface AppState {
 
   // Settings
   settings: Settings | null;
+ //feedback
+  feedbacks: Record<string, string>; // { [exerciseId]: feedback }
+  setFeedback: (exerciseId: string, feedback: string) => void;
+
 
   // UI state
   isSettingsOpen: boolean;
@@ -99,6 +103,15 @@ export const useAppStore = create<AppState>()(
       setLastCursorPos: (positions: Record<number, number>) => {
         set({ lastCursorPos: positions });
       },
+
+      feedbacks: {},
+      setFeedback: (exerciseId, feedback) =>
+        set(state => ({
+          feedbacks: { 
+            ...state.feedbacks, 
+            [exerciseId]: feedback 
+          }
+        })),
       timer: {
         minutes: 25,
         seconds: 0,
